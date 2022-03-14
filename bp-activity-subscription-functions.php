@@ -637,16 +637,6 @@ function bpges_generate_notification( BPGES_Queued_Item $queued_item ) {
 		$link = $activity->primary_link;
 	}
 
-	/**
-	 * Filters the activity link used to build the notification email.
-	 *
-	 * @since 4.0.2
-	 *
-	 * @param string               $link
-	 * @param BP_Activity_Activity $activity
-	 */
-	$link = apply_filters( 'bpges_notification_link', $link, $activity );
-
 	// If message has no content (as in the case of group joins, etc), we'll use a different
 	// $message template
 	if ( empty( $the_content ) ) {
@@ -2541,6 +2531,10 @@ function ass_weekly_digest_week() {
  * @since 3.8.0
  */
 function bpges_register_template_stack() {
+	if ( ! bp_is_group_admin_page() ) {
+		return;
+	}
+
 	bp_register_template_stack( function() {
 		return plugin_dir_path( __FILE__ ) . '/templates/';
 	}, 20 );
